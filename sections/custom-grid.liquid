@@ -1,0 +1,97 @@
+{% schema %}
+{
+  "name": "Custom Grid",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Grid",
+      "blocks": [
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<section class="product-grid">
+  {% for block in section.blocks %}
+    {% assign product = all_products[block.settings.product] %}
+    <div class="product-card">
+      <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+      <h2>{{ product.title }}</h2>
+      <p>{{ product.price | money }}</p>
+      <button class="add-to-cart" data-product-id="{{ product.id }}" data-product-title="{{ product.title }}" data-product-price="{{ product.price | money }}" data-product-image="{{ product.featured_image | img_url: 'medium' }}">Add to Cart</button>
+    </div>
+  {% endfor %}
+</section>
+
+<!-- Pop-Up Modal -->
+<div id="cart-popup" class="cart-popup">
+  <div class="cart-popup-content">
+    <span class="close-popup">&times;</span>
+    <img id="popup-image" src="" alt="Product">
+    <h2 id="popup-title"></h2>
+    <p id="popup-price"></p>
+    <button id="confirm-add-to-cart">Add to Cart</button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const cartPopup = document.getElementById("cart-popup");
+    const closePopup = document.querySelector(".close-popup");
+    const confirmAddToCart = document.getElementById("confirm-add-to-cart");
+    
+    document.querySelectorAll(".add-to-cart").forEach(button => {
+      button.addEventListener("click", function () {
+        const productId = this.getAttribute("data-product-id");
+        const productTitle = this.getAttribute("data-product-title");
+        const productPrice = this.getAttribute("data-product-price");
+        const productImage = this.getAttribute("data-product-image");
+
+        document.getElementById("popup-title").innerText = productTitle;
+        document.getElementById("popup-price").innerText = productPrice;
+        document.getElementById("popup-image").src = productImage;
+        confirmAddToCart.setAttribute("data-product-id", productId);
+
+        cartPopup.style.display = "block";
+      });
+    });
+
+    closePopup.addEventListener("click", function () {
+      cartPopup.style.display = "none";
+    });
+
+    confirmAddToCart.addEventListener("click", function () {
+      const productId = this.getAttribute("data-product-id");
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        body: JSON.stringify({ id: productId, quantity: 1 }),
+        headers: { 'Content-Type': 'application/json' }
+      }).then(response => response.json())
+      .then(() => {
+        alert("Product added to cart!");
+        cartPopup.style.display = "none";
+      });
+    });
+  });
+</script>

@@ -1,0 +1,229 @@
+/* ============================= */
+/*  Custom Banner Styling */
+/* ============================= */
+
+.custom-banner {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+  }
+  
+  .banner-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: opacity 1s ease-in-out;
+  }
+  
+  .banner-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: black;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 2;
+  }
+  
+  .logo-text {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .headline {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  
+  .description {
+    font-size: 18px;
+    max-width: 600px;
+    margin: 10px auto;
+  }
+  
+  /*  "Choose a Gift" Button */
+  .choose-gift-button {
+    display: inline-block;
+    background: yellow;
+    color: black;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .choose-gift-button:hover {
+    transform: scale(1.05);
+  }
+  
+  @keyframes fade-in-out {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  /* ============================= */
+  /*  Product Grid Styling */
+  /* ============================= */
+  
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .product-card {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .product-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .product-card img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .product-card h2 {
+    font-size: 20px;
+    margin: 10px 0;
+  }
+  
+  .product-card p {
+    font-size: 16px;
+    color: gray;
+  }
+  
+  .add-to-cart {
+    background: black;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .add-to-cart:hover {
+    background: darkgray;
+  }
+  
+  /* ============================= */
+  /*  Pop-Up Add to Cart Styling */
+  /* ============================= */
+  
+  .cart-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+  
+  .cart-popup-content {
+    text-align: center;
+  }
+  
+  .cart-popup img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  
+  .cart-popup h2 {
+    font-size: 22px;
+    margin: 10px 0;
+  }
+  
+  .cart-popup p {
+    font-size: 18px;
+    color: gray;
+  }
+  
+  .close-popup {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  #confirm-add-to-cart {
+    background: black;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  #confirm-add-to-cart:hover {
+    background: darkgray;
+  }
+  
+  /* ============================= */
+  /* Mobile Responsive Design */
+  /* ============================= */
+  
+  @media screen and (max-width: 768px) {
+    .custom-banner {
+      height: 300px;
+    }
+  
+    .banner-content {
+      width: 80%;
+      padding: 10px;
+    }
+  
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+  
+    .product-card {
+      width: 100%;
+    }
+  
+    .cart-popup {
+      width: 90%;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .product-grid {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  
+    .headline {
+      font-size: 28px;
+    }
+  
+    .description {
+      font-size: 16px;
+    }
+  }
+  
