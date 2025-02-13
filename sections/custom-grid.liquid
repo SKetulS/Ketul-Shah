@@ -59,7 +59,8 @@
     const cartPopup = document.getElementById("cart-popup");
     const closePopup = document.querySelector(".close-popup");
     const confirmAddToCart = document.getElementById("confirm-add-to-cart");
-    
+
+    const softWinterJacketVariantId = "44515025486012";
     document.querySelectorAll(".add-to-cart").forEach(button => {
       button.addEventListener("click", function () {
         const productId = this.getAttribute("data-product-id");
@@ -83,15 +84,48 @@
     confirmAddToCart.addEventListener("click", function () {
       const productId = this.getAttribute("data-product-id");
 
-      fetch('/cart/add.js', {
-        method: 'POST',
-        body: JSON.stringify({ id: productId, quantity: 1 }),
-        headers: { 'Content-Type': 'application/json' }
-      }).then(response => response.json())
-      .then(() => {
-        alert("Product added to cart!");
-        cartPopup.style.display = "none";
-      });
+      // Fetch product details to check variant options
+      fetch(`/products/${productId}.js`)
+        .then(response => response.json())
+        .then(productData => {
+          let selectedVariantId = null;
+          let isBlackMedium = false;
+
+          // Check if the selected variant is Black & Medium
+          productData.variants.forEach(variant => {
+            if (variant.option1 === "Black" && variant.option2 === "Medium") {
+              selectedVariantId = variant.id;
+              isBlackMedium = true;
+            }
+          });
+
+          if (selectedVariantId) {
+            fetch('/cart/add.js', {
+              method: 'POST',
+              body: JSON.stringify({ id: selectedVariantId, quantity: 1 }),
+              headers: { 'Content-Type': 'application/json' }
+            }).then(response => response.json())
+              .then(() => {
+                // If Black & Medium is selected, auto-add "Soft Winter Jacket"
+                if (isBlackMedium) {
+                  fetch('/cart/add.js', {
+                    method: 'POST',
+                    body: JSON.stringify({ id: softWinterJacketVariantId, quantity: 1 }),
+                    headers: { 'Content-Type': 'application/json' }
+                  }).then(() => {
+                    alert("Product added to cart! 'Soft Winter Jacket' has been automatically added.");
+                  });
+                } else {
+                  alert("Product added to cart!");
+                }
+                cartPopup.style.display = "none";
+              });
+          } else {
+            alert("Product added to cart!");
+            cartPopup.style.display = "none";
+          }
+        });
     });
   });
 </script>
+
