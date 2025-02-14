@@ -1,22 +1,31 @@
+<section class="custom-banner">
+  <div class="banner-container">
+    {% if section.settings.banner_image != blank %}
+      <img src="{{ section.settings.banner_image | img_url: 'master' }}" alt="Banner Image" class="banner-image">
+    {% endif %}
+    <div class="banner-content">
+      <h1 class="logo-text">{{ section.settings.logo_text }}</h1>
+      <h2 class="headline">{{ section.settings.headline }}</h2>
+      <p class="description">{{ section.settings.description }}</p>
+      <a href="{{ section.settings.choose_gift_link }}" class="choose-gift-button">{{ section.settings.choose_gift_text }}</a>
+    </div>
+  </div>
+</section>
+
 {% schema %}
 {
   "name": "Custom Banner",
   "settings": [
     {
       "type": "image_picker",
-      "id": "banner_image_1",
-      "label": "First Background Image"
-    },
-    {
-      "type": "image_picker",
-      "id": "banner_image_2",
-      "label": "Second Background Image"
+      "id": "banner_image",
+      "label": "Banner Background Image"
     },
     {
       "type": "text",
       "id": "logo_text",
       "label": "Logo Text",
-      "default": "TISSO VISON"
+      "default": "TISSO VISION"
     },
     {
       "type": "text",
@@ -49,33 +58,3 @@
   ]
 }
 {% endschema %}
-
-<section class="custom-banner">
-  <div class="banner-bg" id="banner-bg"></div>
-
-  <div class="banner-content">
-    <h1 class="logo-text">{{ section.settings.logo_text }}</h1>
-    <h2 class="headline">{{ section.settings.headline }}</h2>
-    <p class="description">{{ section.settings.description }}</p>
-    <a href="{{ section.settings.choose_gift_link }}" class="choose-gift-button">{{ section.settings.choose_gift_text }}</a>
-  </div>
-</section>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const images = [
-      "{{ section.settings.banner_image_1 | img_url: 'master' }}",
-      "{{ section.settings.banner_image_2 | img_url: 'master' }}"
-    ];
-    let currentIndex = 0;
-    const banner = document.getElementById("banner-bg");
-
-    function changeBackground() {
-      banner.style.backgroundImage = `url(${images[currentIndex]})`;
-      currentIndex = (currentIndex + 1) % images.length;
-    }
-
-    changeBackground();
-    setInterval(changeBackground, 5000);
-  });
-</script>

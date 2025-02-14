@@ -1,3 +1,40 @@
+<section class="product-grid">
+  <h2 class="section-title">Tisso Vision in the Wild</h2>
+  <div class="grid-container">
+    {% for block in section.blocks %}
+      {% assign product = all_products[block.settings.product] %}
+      <div class="product-card">
+        <div class="product-thumbnail" onclick="openProductPopup('{{ product.id }}')">
+          {% if product.featured_image %}
+            <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}" class="product-image">
+          {% else %}
+            <p>No Image Available</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Product Popup Modal -->
+<div id="product-popup" class="popup">
+  <div class="popup-content">
+    <span class="close-popup" onclick="closeProductPopup()">&times;</span>
+    <img id="popup-image" src="" alt="Product Image">
+    <h3 id="popup-title"></h3>
+    <p id="popup-price"></p>
+    <p id="popup-description"></p>
+    
+    <label for="color">Color:</label>
+    <div class="color-options" id="popup-colors"></div>
+
+    <label for="size">Size:</label>
+    <select id="popup-size"></select>
+
+    <button class="add-to-cart" id="add-to-cart-btn">ADD TO CART →</button>
+  </div>
+</div>
+
 {% schema %}
 {
   "name": "Custom Grid",
@@ -19,113 +56,11 @@
     {
       "name": "Custom Grid",
       "blocks": [
-        { "type": "product" },
-        { "type": "product" },
-        { "type": "product" },
-        { "type": "product" },
-        { "type": "product" },
-        { "type": "product" }
+        {
+          "type": "product"
+        }
       ]
     }
   ]
 }
 {% endschema %}
-
-<section class="product-grid">
-  {% for block in section.blocks %}
-    {% assign product = all_products[block.settings.product] %}
-    <div class="product-card">
-      <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
-      <h2>{{ product.title }}</h2>
-      <p>{{ product.price | money }}</p>
-      <button class="add-to-cart" data-product-id="{{ product.id }}" data-product-title="{{ product.title }}" data-product-price="{{ product.price | money }}" data-product-image="{{ product.featured_image | img_url: 'medium' }}">Add to Cart</button>
-    </div>
-  {% endfor %}
-</section>
-
-<!-- Pop-Up Modal -->
-<div id="cart-popup" class="cart-popup">
-  <div class="cart-popup-content">
-    <span class="close-popup">&times;</span>
-    <img id="popup-image" src="" alt="Product">
-    <h2 id="popup-title"></h2>
-    <p id="popup-price"></p>
-    <button id="confirm-add-to-cart">Add to Cart</button>
-  </div>
-</div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const cartPopup = document.getElementById("cart-popup");
-    const closePopup = document.querySelector(".close-popup");
-    const confirmAddToCart = document.getElementById("confirm-add-to-cart");
-
-    const softWinterJacketVariantId = "44515025486012";
-    document.querySelectorAll(".add-to-cart").forEach(button => {
-      button.addEventListener("click", function () {
-        const productId = this.getAttribute("data-product-id");
-        const productTitle = this.getAttribute("data-product-title");
-        const productPrice = this.getAttribute("data-product-price");
-        const productImage = this.getAttribute("data-product-image");
-
-        document.getElementById("popup-title").innerText = productTitle;
-        document.getElementById("popup-price").innerText = productPrice;
-        document.getElementById("popup-image").src = productImage;
-        confirmAddToCart.setAttribute("data-product-id", productId);
-
-        cartPopup.style.display = "block";
-      });
-    });
-
-    closePopup.addEventListener("click", function () {
-      cartPopup.style.display = "none";
-    });
-
-    confirmAddToCart.addEventListener("click", function () {
-      const productId = this.getAttribute("data-product-id");
-
-      // Fetch product details to check variant options
-      fetch(`/products/${productId}.js`)
-        .then(response => response.json())
-        .then(productData => {
-          let selectedVariantId = null;
-          let isBlackMedium = false;
-
-          // Check if the selected variant is Black & Medium
-          productData.variants.forEach(variant => {
-            if (variant.option1 === "Black" && variant.option2 === "Medium") {
-              selectedVariantId = variant.id;
-              isBlackMedium = true;
-            }
-          });
-
-          if (selectedVariantId) {
-            fetch('/cart/add.js', {
-              method: 'POST',
-              body: JSON.stringify({ id: selectedVariantId, quantity: 1 }),
-              headers: { 'Content-Type': 'application/json' }
-            }).then(response => response.json())
-              .then(() => {
-                // If Black & Medium is selected, auto-add "Soft Winter Jacket"
-                if (isBlackMedium) {
-                  fetch('/cart/add.js', {
-                    method: 'POST',
-                    body: JSON.stringify({ id: softWinterJacketVariantId, quantity: 1 }),
-                    headers: { 'Content-Type': 'application/json' }
-                  }).then(() => {
-                    alert("Product added to cart! 'Soft Winter Jacket' has been automatically added.");
-                  });
-                } else {
-                  alert("Product added to cart!");
-                }
-                cartPopup.style.display = "none";
-              });
-          } else {
-            alert("Product added to cart!");
-            cartPopup.style.display = "none";
-          }
-        });
-    });
-  });
-</script>
-
