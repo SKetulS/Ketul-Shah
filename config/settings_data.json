@@ -142,12 +142,11 @@
       "custom-banner": {
         "type": "custom-banner",
         "settings": {
-          "banner_image_1": "shopify://shop_images/WhatsApp_Image_2025-02-13_at_12.28.54_PM.jpg",
-          "banner_image_2": "shopify://shop_images/WhatsApp_Image_2025-02-13_at_12.29.02_PM.jpg",
-          "announcement_text": "Find the ideal gift for your loved ones.",
-          "title": "The Gift Guide",
-          "subtitle": "Discover Joy: Your Ultimate Holiday Gift Destination.",
-          "shop_now_link": ""
+          "banner_title": "The Gift Guide",
+          "banner_description": "Discover Joy: Your Ultimate Holiday Gift Destination.",
+          "banner_image": "shopify://shop_images/WhatsApp_Image_2025-02-13_at_12.29.02_PM.jpg",
+          "button_text": "Shop Now",
+          "button_link": ""
         }
       },
       "custom-grid": {
