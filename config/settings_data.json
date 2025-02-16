@@ -142,12 +142,12 @@
       "custom-banner": {
         "type": "custom-banner",
         "settings": {
-          "banner_image": "shopify://shop_images/WhatsApp_Image_2025-02-13_at_12.29.02_PM.jpg",
-          "logo_text": "TISSO VISION",
-          "headline": "The Gift Guide",
-          "description": "Discover Joy: Your Ultimate Holiday Gift Destination.",
-          "choose_gift_link": "",
-          "choose_gift_text": "CHOOSE GIFT →"
+          "banner_image_1": "shopify://shop_images/WhatsApp_Image_2025-02-13_at_12.28.54_PM.jpg",
+          "banner_image_2": "shopify://shop_images/WhatsApp_Image_2025-02-13_at_12.29.02_PM.jpg",
+          "announcement_text": "Find the ideal gift for your loved ones.",
+          "title": "The Gift Guide",
+          "subtitle": "Discover Joy: Your Ultimate Holiday Gift Destination.",
+          "shop_now_link": ""
         }
       },
       "custom-grid": {
@@ -170,12 +170,33 @@
             "settings": {
               "product": "chequered-red-shirt"
             }
+          },
+          "product_EbMnpd": {
+            "type": "product",
+            "settings": {
+              "product": "classic-leather-jacket"
+            }
+          },
+          "product_V8RtwJ": {
+            "type": "product",
+            "settings": {
+              "product": "classic-varsity-top"
+            }
+          },
+          "product_aY4GEw": {
+            "type": "product",
+            "settings": {
+              "product": "dark-denim-top"
+            }
           }
         },
         "block_order": [
           "product_dNmYBw",
           "product_7wUU3V",
-          "product_qim7iE"
+          "product_qim7iE",
+          "product_EbMnpd",
+          "product_V8RtwJ",
+          "product_aY4GEw"
         ],
         "settings": {}
       }
