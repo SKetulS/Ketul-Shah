@@ -1,65 +1,100 @@
 {% schema %}
 {
-  "name": "Custom Grid",
+  "name": "Product Grid",
   "settings": [
     {
       "type": "product",
       "id": "product_1",
-      "label": "Product 1"
+      "label": "Select Product 1"
     },
     {
       "type": "product",
       "id": "product_2",
-      "label": "Product 2"
+      "label": "Select Product 2"
     },
     {
       "type": "product",
       "id": "product_3",
-      "label": "Product 3"
+      "label": "Select Product 3"
     },
     {
       "type": "product",
       "id": "product_4",
-      "label": "Product 4"
+      "label": "Select Product 4"
     },
     {
       "type": "product",
       "id": "product_5",
-      "label": "Product 5"
+      "label": "Select Product 5"
     },
     {
       "type": "product",
       "id": "product_6",
-      "label": "Product 6"
+      "label": "Select Product 6"
     }
   ],
   "presets": [
     {
-      "name": "Custom Grid"
+      "name": "Product Grid"
     }
   ]
 }
 {% endschema %}
 
-<section class="custom-grid">
-  <h2>Tisso Vision in the Wild</h2>
-  <div class="grid-container">
-    {% for i in (1..6) %}
-      {% assign product = section.settings["product_" | append: i] %}
-      {% if product %}
-        <div class="grid-item" data-product-id="{{ product.variants.first.id }}">
-          <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
-          <button class="view-product">+</button>
-        </div>
-      {% endif %}
-    {% endfor %}
-  </div>
+<section class="product-grid">
+  {% for i in (1..6) %}
+    {% assign product = section.settings["product_" | append: i] %}
+    {% if product != blank %}
+      <div class="product-item" data-product="{{ product.id }}">
+        <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+        <button class="view-product" data-product="{{ product.id }}">+</button>
+      </div>
+    {% endif %}
+  {% endfor %}
 </section>
 
 <div id="product-popup" class="popup">
   <div class="popup-content">
     <span class="close">&times;</span>
-    <div class="popup-details"></div>
-    <button id="add-to-cart">ADD TO CART →</button>
+    <div id="popup-details"></div>
   </div>
 </div>
+
+<style>
+.product-grid { display: flex; flex-wrap: wrap; gap: 20px; }
+.product-item { position: relative; width: 30%; text-align: center; }
+.view-product { position: absolute; top: 10px; right: 10px; background: black; color: white; }
+.popup { display: none; position: fixed; width: 50%; background: white; padding: 20px; top: 20%; left: 25%; }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll(".view-product").forEach(button => {
+    button.addEventListener("click", function() {
+      const productId = this.dataset.product;
+      fetch(`/products/${productId}.json`)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("popup-details").innerHTML = `
+            <h2>${data.product.title}</h2>
+            <p>${data.product.body_html}</p>
+            <button onclick="addToCart(${data.product.id})">Add to Cart</button>
+          `;
+          document.getElementById("product-popup").style.display = "block";
+        });
+    });
+  });
+
+  document.querySelector(".close").addEventListener("click", function() {
+    document.getElementById("product-popup").style.display = "none";
+  });
+});
+
+function addToCart(productId) {
+  fetch('/cart/add.js', {
+    method: 'POST',
+    body: JSON.stringify({ id: productId, quantity: 1 }),
+    headers: { 'Content-Type': 'application/json' }
+  }).then(() => alert("Added to Cart!"));
+}
+</script>
