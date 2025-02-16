@@ -1,0 +1,155 @@
+{% schema %}
+{
+  "name": "Product Grid",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Select Product 1"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Select Product 2"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Select Product 3"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Select Product 4"
+    },
+    {
+      "type": "product",
+      "id": "product_5",
+      "label": "Select Product 5"
+    },
+    {
+      "type": "product",
+      "id": "product_6",
+      "label": "Select Product 6"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Grid"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="product-grid">
+  {% for i in (1..6) %}
+    {% assign product = section.settings["product_" | append: i] %}
+    {% if product != blank %}
+      <div class="product-item">
+        <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+        <button class="view-product" data-product="{{ product.id }}">+</button>
+      </div>
+    {% endif %}
+  {% endfor %}
+</section>
+
+<div id="product-popup" class="popup">
+  <div class="popup-content">
+    <span class="close">&times;</span>
+    <div id="popup-details"></div>
+  </div>
+</div>
+
+<style>
+.product-grid { display: flex; flex-wrap: wrap; gap: 20px; }
+.product-item { position: relative; width: 30%; text-align: center; }
+.view-product { position: absolute; top: 10px; right: 10px; background: black; color: white; }
+.popup { display: none; position: fixed; width: 50%; background: white; padding: 20px; top: 20%; left: 25%; }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll(".view-product").forEach(button => {
+    button.addEventListener("click", function() {
+      const productId = this.dataset.product;
+      fetch(`/products/${productId}.json`)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("popup-details").innerHTML = `
+            <h2>${data.product.title}</h2>
+            <p>${data.product.body_html}</p>
+            <button onclick="addToCart(${data.product.id})">Add to Cart</button>
+          `;
+          document.getElementById("product-popup").style.display = "block";
+        });
+    });
+  });
+
+  document.querySelector(".close").addEventListener("click", function() {
+    document.getElementById("product-popup").style.display = "none";
+  });
+});
+
+function addToCart(productId) {
+  fetch('/cart/add.js', {
+    method: 'POST',
+    body: JSON.stringify({ id: productId, quantity: 1 }),
+    headers: { 'Content-Type': 'application/json' }
+  }).then(() => alert("Added to Cart!"));
+}
+</script>
+
+<style>
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  gap: 20px; /* Space between items */
+  max-width: 1000px; /* Restrict width */
+  margin: 0 auto; /* Center the grid */
+}
+
+.product-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px; /* Rounded corners */
+  background: #f9f9f9;
+}
+
+.product-item img {
+  width: 100%; /* Make images fill the container */
+  height: auto;
+  display: block;
+}
+
+.view-product {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: black;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+  }
+}
+
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: repeat(1, 1fr); /* 1 column for mobile */
+  }
+}
+
+
+</style>
