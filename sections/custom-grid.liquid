@@ -1,66 +1,65 @@
-<section class="product-grid">
-  <h2 class="section-title">Tisso Vision in the Wild</h2>
-  <div class="grid-container">
-    {% for block in section.blocks %}
-      {% assign product = all_products[block.settings.product] %}
-      <div class="product-card">
-        <div class="product-thumbnail" onclick="openProductPopup('{{ product.id }}')">
-          {% if product.featured_image %}
-            <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}" class="product-image">
-          {% else %}
-            <p>No Image Available</p>
-          {% endif %}
-        </div>
-      </div>
-    {% endfor %}
-  </div>
-</section>
-
-<!-- Product Popup Modal -->
-<div id="product-popup" class="popup">
-  <div class="popup-content">
-    <span class="close-popup" onclick="closeProductPopup()">&times;</span>
-    <img id="popup-image" src="" alt="Product Image">
-    <h3 id="popup-title"></h3>
-    <p id="popup-price"></p>
-    <p id="popup-description"></p>
-    
-    <label for="color">Color:</label>
-    <div class="color-options" id="popup-colors"></div>
-
-    <label for="size">Size:</label>
-    <select id="popup-size"></select>
-
-    <button class="add-to-cart" id="add-to-cart-btn">ADD TO CART →</button>
-  </div>
-</div>
-
 {% schema %}
 {
   "name": "Custom Grid",
-  "settings": [],
-  "blocks": [
+  "settings": [
     {
       "type": "product",
-      "name": "Product",
-      "settings": [
-        {
-          "type": "product",
-          "id": "product",
-          "label": "Select Product"
-        }
-      ]
+      "id": "product_1",
+      "label": "Product 1"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product 2"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product 3"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Product 4"
+    },
+    {
+      "type": "product",
+      "id": "product_5",
+      "label": "Product 5"
+    },
+    {
+      "type": "product",
+      "id": "product_6",
+      "label": "Product 6"
     }
   ],
   "presets": [
     {
-      "name": "Custom Grid",
-      "blocks": [
-        {
-          "type": "product"
-        }
-      ]
+      "name": "Custom Grid"
     }
   ]
 }
 {% endschema %}
+
+<section class="custom-grid">
+  <h2>Tisso Vision in the Wild</h2>
+  <div class="grid-container">
+    {% for i in (1..6) %}
+      {% assign product = section.settings["product_" | append: i] %}
+      {% if product %}
+        <div class="grid-item" data-product-id="{{ product.variants.first.id }}">
+          <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+          <button class="view-product">+</button>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+<div id="product-popup" class="popup">
+  <div class="popup-content">
+    <span class="close">&times;</span>
+    <div class="popup-details"></div>
+    <button id="add-to-cart">ADD TO CART →</button>
+  </div>
+</div>

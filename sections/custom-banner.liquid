@@ -1,54 +1,39 @@
-<section class="custom-banner">
-  <div class="banner-container">
-    {% if section.settings.banner_image != blank %}
-      <img src="{{ section.settings.banner_image | img_url: 'master' }}" alt="Banner Image" class="banner-image">
-    {% endif %}
-    <div class="banner-content">
-      <h1 class="logo-text">{{ section.settings.logo_text }}</h1>
-      <h2 class="headline">{{ section.settings.headline }}</h2>
-      <p class="description">{{ section.settings.description }}</p>
-      <a href="{{ section.settings.choose_gift_link }}" class="choose-gift-button">{{ section.settings.choose_gift_text }}</a>
-    </div>
-  </div>
-</section>
-
 {% schema %}
 {
   "name": "Custom Banner",
   "settings": [
     {
       "type": "image_picker",
-      "id": "banner_image",
-      "label": "Banner Background Image"
+      "id": "banner_image_1",
+      "label": "First Banner Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image_2",
+      "label": "Second Banner Image"
     },
     {
       "type": "text",
-      "id": "logo_text",
-      "label": "Logo Text",
-      "default": "TISSO VISION"
+      "id": "announcement_text",
+      "label": "Announcement Bar Text",
+      "default": "Find the ideal gift for your loved ones."
     },
     {
       "type": "text",
-      "id": "headline",
-      "label": "Headline",
+      "id": "title",
+      "label": "Main Title",
       "default": "The Gift Guide"
     },
     {
       "type": "textarea",
-      "id": "description",
-      "label": "Description",
+      "id": "subtitle",
+      "label": "Subtitle",
       "default": "Discover Joy: Your Ultimate Holiday Gift Destination."
     },
     {
       "type": "url",
-      "id": "choose_gift_link",
-      "label": "Choose Gift Button Link"
-    },
-    {
-      "type": "text",
-      "id": "choose_gift_text",
-      "label": "Choose Gift Button Text",
-      "default": "CHOOSE GIFT →"
+      "id": "shop_now_link",
+      "label": "Shop Now Button Link"
     }
   ],
   "presets": [
@@ -58,3 +43,22 @@
   ]
 }
 {% endschema %}
+
+<section class="custom-banner">
+  <div class="announcement-bar">
+    <p>{{ section.settings.announcement_text }}</p>
+  </div>
+
+  <div class="banner-container">
+    <img src="{{ section.settings.banner_image_1 | img_url: 'master' }}" class="banner-image active">
+    <img src="{{ section.settings.banner_image_2 | img_url: 'master' }}" class="banner-image">
+    
+    <div class="banner-overlay">
+      <h1>{{ section.settings.title }}</h1>
+      <p>{{ section.settings.subtitle }}</p>
+      <a href="{{ section.settings.shop_now_link }}" class="shop-button">Shop Now →</a>
+    </div>
+  </div>
+
+  <a href="#" class="choose-gift">CHOOSE GIFT →</a>
+</section>
