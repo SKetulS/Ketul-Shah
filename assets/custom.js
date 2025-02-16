@@ -1,13 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Banner Image Rotation
     const bannerImages = document.querySelectorAll(".banner-image");
     let currentImage = 0;
   
-    setInterval(() => {
-      bannerImages[currentImage].classList.remove("active");
+    function switchImage() {
+      bannerImages.forEach((img, index) => {
+        img.classList.toggle("active", index === currentImage);
+      });
       currentImage = (currentImage + 1) % bannerImages.length;
-      bannerImages[currentImage].classList.add("active");
-    }, 5000);
+    }
   
+    setInterval(switchImage, 5000);
+    switchImage(); // Initialize first image
+  
+    // Product Popup
     document.querySelectorAll(".view-product").forEach(button => {
       button.addEventListener("click", function () {
         const productId = this.parentElement.dataset.productId;
